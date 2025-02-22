@@ -1,25 +1,18 @@
 {
   "name": "FastAPI DevContainer",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "context": "..",
-    "args": {
-      "PLATFORM": "linux/arm64"
-    }
-  },
-  "appPort": [
-    8000
-  ],
+  "dockerComposeFile": "docker-compose.dev.yml",
+  "service": "fastapi",
+  "workspaceFolder": "/workspace",
   "forwardPorts": [
     8000,
     5678
   ],
-  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && pip install debugpy && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
-  "remoteUser": "root",
+  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && pip install debugpy",
+  "remoteUser": "vscode",
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh"
+        "terminal.integrated.defaultProfile.linux": "sh"
       },
       "extensions": [
         "ms-python.python",
@@ -29,4 +22,5 @@
       ]
     }
   }
+  
 }
