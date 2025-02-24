@@ -1,25 +1,18 @@
-version: "3.8"
-
 services:
   fastapi:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: .devcontainer/Dockerfile
+    container_name: dev_fastapi
     volumes:
-      - .:/workspace
+      - ../:/workspace/
     ports:
       - "8000:8000"
     depends_on:
       - postgres
     environment:
-      PYTHONPATH: "/app"
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/devdb
-    command:
-      [
-        "sh",
-        "-c",
-        "cd /app && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
-      ]
+      - PYTHONPATH=.
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/devdb
 
   postgres:
     image: postgres:15
