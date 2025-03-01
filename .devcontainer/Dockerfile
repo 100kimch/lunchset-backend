@@ -14,6 +14,10 @@ COPY /app ./app
 COPY requirements.txt ./requirements.txt
 RUN cat ./requirements.txt && pip install --no-cache-dir -r ./requirements.txt
 
+# DevContainer에서는 테스트 패키지도 설치
+COPY requirements.dev.txt ./requirements.dev.txt
+RUN cat ./requirements.dev.txt && pip install --no-cache-dir -r ./requirements.dev.txt
+
 # 권한 설정 (vscode 사용자가 실행 가능하도록)
 RUN chown -R vscode:vscode /workspace/app
 

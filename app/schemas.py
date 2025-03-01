@@ -1,5 +1,6 @@
-from enum import Enum  # ✅ Enum을 명확히 임포트
-from pydantic import BaseModel, EmailStr, constr
+from enum import Enum
+from typing import Annotated  # ✅ Enum을 명확히 임포트
+from pydantic import BaseModel, ConfigDict, EmailStr, constr
 from datetime import datetime
 from uuid import UUID
 
@@ -14,9 +15,7 @@ class MealCreate(BaseModel):
 class MealResponse(MealCreate):
     id: UUID
     created_at: datetime
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # 발주 (Order) 스키마
@@ -26,31 +25,47 @@ class OrderCreate(BaseModel):
     quantity: int
 
 
+class OrderResponse(OrderCreate):
+    id: UUID
+    order_date: datetime
+    model_config = ConfigDict(from_attributes=True)
+
+
+# 사용자 역할 Enum
 class UserRole(str, Enum):
     nutritionist = "nutritionist"
     kindergarten_teacher = "kindergarten_teacher"
     daycare_teacher = "daycare_teacher"
 
 
+# 회원가입 요청 스키마
 class UserCreate(BaseModel):
     email: EmailStr
-    password: constr(min_length=8)
+    password: Annotated[str, ...]
     role: UserRole
+    age: int | None = None  # ✅ 연령 추가
+    institution: str | None = None  # ✅ 유치원(학교) 추가
 
 
+# 로그인 요청 스키마
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+# 유저 상세 조회 및 수정 스키마
+class UserUpdate(BaseModel):
+    role: UserRole | None = None
+    age: int | None = None
+    institution: str | None = None
+
+
+# 유저 응답 스키마
 class UserResponse(BaseModel):
-    id: str
+    id: UUID
     email: str
     role: UserRole
-    created_at: str
-
-    class Config:
-        orm_mode = True
-
-
-class OrderResponse(OrderCreate):
-    id: UUID
-    order_date: datetime
-
-    class Config:
-        orm_mode = True
+    age: int | None = None
+    institution: str | None = None
+    created_at: datetime
+    model_config = ConfigDict(from_attributes=True)

@@ -1,8 +1,16 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from app.routes import auth, meals, orders
 from app.database import engine, Base
 
-app = FastAPI()
+# ✅ Lifespan 컨텍스트 매니저 추가
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Lifespan startup")  # ✅ 앱이 시작될 때 실행
+    yield
+    print("Lifespan shutdown")  # ✅ 앱이 종료될 때 실행
+
+app = FastAPI(lifespan=lifespan)  # ✅ Lifespan 적용
 
 # DB 테이블 생성
 Base.metadata.create_all(bind=engine)

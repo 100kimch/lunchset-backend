@@ -7,13 +7,12 @@
     8000,
     5678
   ],
-  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && pip install debugpy && cd /workspace/ && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -r requirements.dev.txt && pip install debugpy && cd /workspace/ && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "sh",
-        "python.defaultInterpreterPath": "/usr/local/bin/python3"
+        "terminal.integrated.defaultProfile.linux": "sh"
       },
       "extensions": [
         "ms-python.python",

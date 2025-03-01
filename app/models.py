@@ -12,14 +12,12 @@ class User(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
-    role = Column(
-        Enum(
-            "nutritionist", "kindergarten_teacher", "daycare_teacher", name="user_roles"
-        ),
-        nullable=False,
-    )
+    role = Column(Enum("nutritionist", "kindergarten_teacher", "daycare_teacher", name="user_roles"), nullable=False)
+    age = Column(Integer, nullable=True)  # ✅ 연령 필드 추가
+    institution = Column(String, nullable=True)  # ✅ 유치원(학교) 필드 추가
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 
 class Meal(Base):

@@ -27,3 +27,9 @@ docker system prune -af         # 불필요한 캐시 제거
 ```bash
 docker compose -f .devcontainer/docker-compose.dev.yml up --build
 ```
+
+## api 테스트
+
+```bash
+pytest tests/
+```
