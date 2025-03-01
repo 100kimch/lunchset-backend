@@ -7,12 +7,24 @@
     8000,
     5678
   ],
-  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -r requirements.dev.txt && pip install debugpy && cd /workspace/ && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
-  "remoteUser": "vscode",
+  "containerUser": "vscode",
+  "postCreateCommand": "/bin/bash /workspace/.devcontainer/setup.sh",
+  "mounts": [
+    "source=${env:HOME}/.zshrc,target=/home/vscode/.zshrc,type=bind",
+    "source=${env:HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "sh"
+        "terminal.integrated.defaultProfile.linux": "sh",
+        "python.testing.pytestArgs": [
+          "."
+        ],
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true,
+        "python.formatting.provider": "black",
+        "python.linting.mypyEnabled": true,
+        "python.linting.enabled": true
       },
       "extensions": [
         "ms-python.python",
