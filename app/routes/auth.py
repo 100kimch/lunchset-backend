@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from sqlalchemy import Column
 from sqlalchemy.orm import Session
 from app.models import User
 from app.schemas import UserCreate, UserResponse, UserLogin, UserUpdate
@@ -77,7 +78,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     if not user:
         raise HTTPException(status_code=401, detail="User not found")  # ✅ 사용자 없을 때 메시지 변경
 
-    if not verify_password(form_data.password, user.password_hash):
+    if not verify_password(form_data.password, str(user.password_hash)):
         raise HTTPException(status_code=401, detail="Incorrect password")  # ✅ 비밀번호 오류 메시지 변경
 
     token = create_access_token({"sub": str(user.id)})
@@ -107,15 +108,21 @@ def update_user_detail(update_data: UserUpdate, token: str = Depends(oauth2_sche
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    if update_data.role:
-        user.role = update_data.role
-    if update_data.age:
-        user.age = update_data.age
-    if update_data.institution:
-        user.institution = update_data.institution
+    # ✅ 필드 값이 None이 아닐 때만 업데이트
+    if update_data.role is not None:
+        setattr(user, "role", update_data.role)
+    if update_data.age is not None:
+        setattr(user, "age", update_data.age)
+    if update_data.institution is not None:
+        setattr(user, "institution", update_data.institution)
 
-    db.commit()
-    db.refresh(user)
+    try:
+        db.commit()
+        db.refresh(user)
+    except Exception as e:
+        db.rollback()  # ✅ 오류 발생 시 롤백
+        raise HTTPException(status_code=500, detail=str(e))  # ✅ FastAPI에서 오류 메시지를 명확하게 반환
+
     return user
 
 # ✅ 계정 삭제 API

@@ -7,6 +7,9 @@
     8000,
     5678
   ],
+  "remoteEnv": {
+    "PYTHONPATH": "/workspace"
+  },
   "containerUser": "vscode",
   "postCreateCommand": "/bin/bash /workspace/.devcontainer/setup.sh",
   "mounts": [
@@ -16,7 +19,8 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "sh",
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
         "python.testing.pytestArgs": [
           "."
         ],

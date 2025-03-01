@@ -1,10 +1,11 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-passlib[bcrypt]
-python-jose[cryptography]
 email-validator
+fastapi
 httpx
+passlib[bcrypt]
+passlib[context]
+psycopg2-binary
 pytest
 pytest-asyncio
+python-jose[cryptography]
+sqlalchemy
+uvicorn

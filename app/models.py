@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 from app.database import Base
-
+from app.schemas import UserRole
 
 class User(Base):
     __tablename__ = "users"
@@ -12,12 +12,11 @@ class User(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
-    role = Column(Enum("nutritionist", "kindergarten_teacher", "daycare_teacher", name="user_roles"), nullable=False)
-    age = Column(Integer, nullable=True)  # ✅ 연령 필드 추가
-    institution = Column(String, nullable=True)  # ✅ 유치원(학교) 필드 추가
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    role = Column(Enum(UserRole, name="user_role_enum", create_type=True), nullable=False)
+    age = Column(Integer, nullable=True)
+    institution = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
 
 class Meal(Base):
@@ -27,8 +26,8 @@ class Meal(Base):
     name = Column(String, nullable=False)
     description = Column(String, nullable=True)
     calories = Column(Integer, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
 
 class Order(Base):
@@ -38,7 +37,7 @@ class Order(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     meal_id = Column(UUID(as_uuid=True), ForeignKey("meals.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
-    order_date = Column(DateTime, default=datetime.utcnow)
+    order_date = Column(DateTime, default=datetime.now())
 
     user = relationship("User", backref="orders")
     meal = relationship("Meal", backref="orders")

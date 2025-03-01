@@ -1,0 +1,49 @@
+# Python 관련 불필요한 파일
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# 환경 설정 및 가상 환경 파일
+.env
+.env.*
+*.venv/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# VSCode 설정 관련 파일 (개인 설정 제외)
+.vscode/
+.history/
+
+# DevContainer 설정 관련 파일 (자동 생성되는 파일 제외)
+.devcontainer/.postStartCommand.log
+.devcontainer/.rebuild-required
+
+# Docker 및 빌드 관련 파일
+.dockerignore
+docker-compose.override.yml
+.docker/
+**/Dockerfile
+**/docker-compose*.yml
+
+# IDE 및 편집기 관련 설정 파일
+.idea/
+*.swp
+*.swo
+*~
+
+# Test & Logs 관련 파일
+htmlcov/
+.tox/
+.nox/
+coverage.*
+*.cover
+*.log
+logs/
+*.out
+*.rej
+pytest_cache/
+tests/__pycache__/
+tests/.pytest_cache/
